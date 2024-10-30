@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vigenere Cipher</title>
+    <link rel="stylesheet" href="/static/style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"/>
+      <link rel="stylesheet" href="/static/assets/aos.css">
+  </head>
+  <body>
+    <div class="container-fluid text-light">
+      <div class="row">
+        <!-- Container Glass Pertama (sisi kiri) -->
+        <div class="col-lg-4 col-md-5 col-sm-12 mb-3" data-aos="fade-right">
+          <div class="container-glass sidenav">
+            <h4>Cipher Substitusi Abjad Jamak (Polyalphabetic Cipher)</h4>
+            <hr />
+            <div class="layout layout-input">
+              <label for="plaintext">Plaintext:</label>
+              <input
+                type="text"
+                id="plaintext"
+                placeholder="Enter plaintext here"
+              />
+              <label for="key">Key:</label>
+              <input type="text" id="key" placeholder="Enter key here" />
+            </div>
+
+            <div class="d-flex gap-2" onclick="encrypt()">
+                <button class="ui-btn" id="enc">
+                    <span>
+                    Encrypt 
+                    </span>
+                </button>
+
+                <button class="ui-btn" id="dec" onclick="decrypt()">
+                    <span>
+                    Decrypt 
+                    </span>
+                </button>
+                <button class="ui-btn" id="cle" onclick="clearText()">
+                    <span>
+                        Clear 
+                    </span>
+                </button>
+            </div>
+
+            <div class="mt-3">
+              <h4>Penjelasan :</h4>
+              <hr>
+              <div
+                id="carouselExampleAutoplaying"
+                class="carousel slide"
+                data-bs-ride="carousel"
+              >
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <h6>Cipher substitusi abjad jamak atau polyalphabetic cipher
+                      adalah teknik enkripsi yang menggunakan beberapa alfabet
+                      substitusi berbeda untuk mengenkripsi pesan. Berbeda
+                      dengan cipher substitusi tunggal, yang menggunakan satu
+                      alfabet untuk seluruh pesan, polyalphabetic cipher
+                      mengubah alfabet substitusi secara berkala, biasanya
+                      berdasarkan kata kunci atau urutan tertentu.</h6>
+                  </div>
+                  <div class="carousel-item">
+                    <h6>
+                      Contoh terkenal dari cipher ini adalah Vigenère cipher, di
+                      mana setiap huruf dalam teks asli digantikan oleh huruf
+                      yang berbeda sesuai dengan huruf pada kata kunci. Setiap
+                      huruf dalam kata kunci menggeser posisi alfabet
+                      berdasarkan posisinya di tabel abjad, menghasilkan
+                      enkripsi yang lebih kuat karena pola huruf lebih sulit
+                      ditebak.
+                    </h6>
+                  </div>
+                  <div class="carousel-item">
+                    <h6>
+                      Keunggulan polyalphabetic cipher adalah kemampuannya dalam
+                      mengurangi kemunculan pola-pola frekuensi yang biasa
+                      ditemukan dalam teks asli, sehingga lebih sulit dipecahkan
+                      dengan analisis frekuensi tradisional.
+                    </h6>
+                  </div>
+                </div>
+                <button
+                  class="carousel-control-prev"
+                  type="button"
+                  data-bs-target="#carouselExampleAutoplaying"
+                  data-bs-slide="prev">
+                  <span
+                    class="carousel-control-prev-icon"
+                    aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button
+                  class="carousel-control-next"
+                  type="button"
+                  data-bs-target="#carouselExampleAutoplaying"
+                  data-bs-slide="next">
+                  <span
+                    class="carousel-control-next-icon"
+                    aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Container Glass Kedua dan Ketiga (sebelah kanan) -->
+        <div class="col-lg-8 col-md-7 col-sm-12">
+          <div class="row">
+            <!-- Container Kedua -->
+            <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+              <div class="container-glass" data-aos="fade-down">
+                <h2>Ciphertext</h2>
+                <hr />
+                <h5>
+                  <span class="label label-danger"
+                    >Ciphertext Akan Tampil Ketika Plaintext dan Key di
+                    Enkripsi</span
+                  >
+                </h5>
+                <div class="layout layout-ciphertext">
+                  <label for="ciphertext">Ciphertext:</label>
+                  <input
+                    type="text"
+                    id="ciphertext"
+                    placeholder="Ciphertext appears here"
+                    readonly
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Container Ketiga -->
+            <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+              <div class="container-glass" data-aos="fade-left">
+                <h2>Plaintext</h2>
+                <hr />
+                <h5>
+                  <span class="label label-success"
+                    >Plaintext Akan Tampil Ketika Ciphertext di Dekripsi</span
+                  >
+                </h5>
+                <div class="layout layout-plaintext">
+                  <label for="decrypted-plaintext">Decrypted Plaintext:</label>
+                  <input
+                    type="text"
+                    id="decrypted-plaintext"
+                    placeholder="Plaintext after decryption"
+                    readonly
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Container Glass Keempat (di bawah container kedua dan ketiga) -->
+          <div class="row">
+            <div class="col-12">
+              <div class="container-glass mt-3" data-aos="fade-up">
+                <h4>Our Team:</h4>
+                <hr>
+                <div class="container">
+                  <div data-text="Muh. Ikbal - E1E122066" style="--r: -15" class="glass" id="firefly"></div>
+                  <div data-text="Muhammad Raihan Putra K. - E1E122070" style="--r: 5" class="glass" id="jingliu" ></div>
+                  <div data-text="Fiqrah Idhul Dwi Augerah - E1E122053" style="--r: 25" class="glass" id="ruan_mei"></div>
+                  <div data-text="Albertus Reynhard Dharmawan - E1E122037" style="--r: 5" class="glass" id="topaz"></div>
+                  <div data-text="Reksa Leo Saputra - E1E122137" style="--r: 25" class="glass" id="kafka"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/static/assets/aos.js"></script>
+    <script>
+      async function encrypt() {
+        const plaintext = document.getElementById("plaintext").value;
+        const key = document.getElementById("key").value;
+
+        if (!plaintext || !key) {
+          Swal.fire({
+            icon: "warning",
+            title: "Input Tidak Lengkap",
+            text: "Mohon Pastikan Kolom Plaintext dan Key Telah Terisi!",
+            confirmButtonText: "OK",
+          });
+          return;
+        }
+        const response = await fetch("/encrypt", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ plaintext, key }),
+        });
+
+        const data = await response.json();
+        document.getElementById("ciphertext").value = data.ciphertext;
+      }
+
+      async function decrypt() {
+        const ciphertext = document.getElementById("ciphertext").value;
+        const key = document.getElementById("key").value;
+
+        if (!plaintext || !key) {
+          Swal.fire({
+            icon: "warning",
+            title: "Input Tidak Lengkap",
+            text: "Mohon Pastikan Kolom Plaintext dan Key Telah Terisi!",
+            confirmButtonText: "OK",
+          });
+          return;
+        }
+
+        const response = await fetch("/decrypt", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ciphertext, key }),
+        });
+
+        const data = await response.json();
+        document.getElementById("decrypted-plaintext").value =
+          data.decrypted_text;
+      }
+
+      async function clearText() {
+            Swal.fire({
+            title: "Apakah Kamu Yakin?",
+            text: "Apakah Kamu Benar-benar Ingin Membersihkan Data?",
+            icon: "danger",
+            showDenyButton: true,
+            confirmButtonText: "Ok",
+            denyButtonText: `Cancel`,
+        }).then((result) => { 
+            if (result.isConfirmed) {
+                document.getElementById("ciphertext").value = "";
+                document.getElementById("key").value = "";
+                document.getElementById("decrypted-plaintext").value = "";
+                document.getElementById("plaintext").value = "";
+                Swal.fire("Berhasil Dihapus!", "", "success");
+            }
+        });
+        }
+    </script>
+
+    <script>
+        window.addEventListener('load', () => {
+        AOS.init({
+            duration: 1500,
+            easing: 'ease-in-out',
+            once: true,
+            mirror: false
+        })
+        });
+    </script>
+  </body>
+</html>
